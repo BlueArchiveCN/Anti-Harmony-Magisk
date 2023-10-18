@@ -69,13 +69,14 @@ fi
 
 on_change() {
   ui_print "正在准备替换和谐立绘"
-
   if [ ! -d "/data/media/0/Android/data/com.RoamingStar.BlueArchive" ] && [ ! -d "/data/media/0/Android/data/com.RoamingStar.BlueArchive.bilibili" ]; then
-    ui_print "未检测到游戏"
+    abort "未检测到游戏"
   else
     #官服检测
     if [ -d "/data/media/0/Android/data/com.RoamingStar.BlueArchive" ]; then
       ui_print "已检测到官服"
+      [ ! -d "/sdcard/Documents/BA-backups/" ] && mkdir /sdcard/Documents/BA-backups/
+      cp "/data/media/0/Android/data/com.RoamingStar.BlueArchive/files/LocalizeConfig.txt" "/sdcard/Documents/BA-backups/"
       cp -r ${MODPATH}/files/* /data/media/0/Android/data/com.RoamingStar.BlueArchive/files/
     else
       ui_print "未检测到官服"
@@ -84,6 +85,8 @@ on_change() {
     #b服安装
     if [ -d "/data/media/0/Android/data/com.RoamingStar.BlueArchive.bilibili" ]; then
       ui_print "已检测到b服"
+      [ ! -d "/sdcard/Documents/BA-b-backups/" ] && mkdir /sdcard/Documents/BA-b-backups/
+      cp "/data/media/0/Android/data/com.RoamingStar.BlueArchive.bilibili/files/LocalizeConfig.txt" "/sdcard/Documents/BA-b-backups/"
       cp -r ${MODPATH}/files/* /data/media/0/Android/data/com.RoamingStar.BlueArchive.bilibili/files/
     else
       ui_print "未检测到b服"
