@@ -1,4 +1,6 @@
 SKIPUNZIP=0
+source $MODPATH/common/addon/Volume-Key-Selector/install.sh
+source $MODPATH/common/uninstall.sh
 # 通用部分
 # SKIPUNZIP: 解压方式。0=自动，1=手动
 # MODPATH (path): 当前模块的安装目录
@@ -65,34 +67,47 @@ else
   }
 fi
 
-on_change(){
+on_change() {
   ui_print "正在准备替换和谐立绘"
-
   if [ ! -d "/data/media/0/Android/data/com.RoamingStar.BlueArchive" ] && [ ! -d "/data/media/0/Android/data/com.RoamingStar.BlueArchive.bilibili" ]; then
-    ui_print "未检测到游戏"
+    abort "未检测到游戏"
   else
     #官服检测
     if [ -d "/data/media/0/Android/data/com.RoamingStar.BlueArchive" ]; then
-        ui_print "已检测到官服"
-        cp -r ${MODPATH}/files/* /data/media/0/Android/data/com.RoamingStar.BlueArchive/files/
+      ui_print "已检测到官服"
+      [ ! -d "/sdcard/Documents/BA-backups/" ] && mkdir /sdcard/Documents/BA-backups/
+      cp "/data/media/0/Android/data/com.RoamingStar.BlueArchive/files/LocalizeConfig.txt" "/sdcard/Documents/BA-backups/"
+      cp -r ${MODPATH}/files/* /data/media/0/Android/data/com.RoamingStar.BlueArchive/files/
     else
-        ui_print "未检测到官服"
+      ui_print "未检测到官服"
     fi
-
 
     #b服安装
     if [ -d "/data/media/0/Android/data/com.RoamingStar.BlueArchive.bilibili" ]; then
-        ui_print "已检测到b服"
-        cp -r ${MODPATH}/files/* /data/media/0/Android/data/com.RoamingStar.BlueArchive.bilibili/files/
+      ui_print "已检测到b服"
+      [ ! -d "/sdcard/Documents/BA-b-backups/" ] && mkdir /sdcard/Documents/BA-b-backups/
+      cp "/data/media/0/Android/data/com.RoamingStar.BlueArchive.bilibili/files/LocalizeConfig.txt" "/sdcard/Documents/BA-b-backups/"
+      cp -r ${MODPATH}/files/* /data/media/0/Android/data/com.RoamingStar.BlueArchive.bilibili/files/
     else
-        ui_print "未检测到b服"
+      ui_print "未检测到b服"
     fi
 
     ui_print "安装完成"
   fi
 }
 
-on_change
+ui_print "使用官方留下的后门，阿露也能轻松反和谐啦"
+ui_print "按下音量键来选择模块功能:"
+ui_print "音量+ : 安装反和谐"
+ui_print "音量- : 卸载反和谐"
+if chooseport; then
+  ui_print "正在安装..."
+  on_change
+else
+  ui_print "正在卸载..."
+  on_uninstall
+  ui_print "卸载已完成,模块将会在重启后自动删除"
+fi
 
 # 用法: 函数名 类型 地址
 # 函数名: replace 或 (推荐使用) remove
